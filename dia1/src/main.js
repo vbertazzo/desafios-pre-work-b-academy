@@ -7,11 +7,10 @@ app.innerHTML = `
 `
 const visibilityButton = document.querySelector('[data-js="toggle-visibility"')
 
-const toggleContentVisibility = () => {
+const toggleContentVisibility = e => {
   app.style.display = app.style.display === 'none' ? 'block' : 'none'
-  app.style.display === 'none'
-    ? (visibilityButton.textContent = 'Mostrar conteúdo')
-    : (visibilityButton.textContent = 'Esconder conteúdo')
+  e.target.textContent =
+    app.style.display === 'none' ? 'Mostrar conteúdo' : 'Esconder conteúdo'
 }
 
 visibilityButton.addEventListener('click', toggleContentVisibility, false)
