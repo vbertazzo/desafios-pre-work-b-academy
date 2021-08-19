@@ -11,6 +11,45 @@
       <label for="name">Nome:</label>
       <input type="text" id="name" data-js="name" />
     </form>
+
+    <br />
+
+    <form data-js="car-form">
+      <label for="image">Url da imagem:</label>
+      <input type="url" name="image" id="image" data-js="image-input" />
+
+      <label for="brand">Marca / Modelo:</label>
+      <input type="text" name="brand" id="brand" />
+
+      <label for="year">Ano:</label>
+      <input type="number" name="year" id="year" min="1900" max="2021" />
+
+      <label for="plate">Placa:</label>
+      <input type="text" name="plate" id="plate" />
+
+      <label for="color">Cor:</label>
+      <input type="text" name="color" id="color" />
+
+      <br />
+
+      <button type="submit">Enviar</button>
+    </form>
+
+    <table data-js="car-table">
+      <caption>
+        Lista de carros
+      </caption>
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Marca / Modelo</th>
+          <th>Ano</th>
+          <th>Placa</th>
+          <th>Cor</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

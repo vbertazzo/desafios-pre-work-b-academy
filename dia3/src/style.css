@@ -7,6 +7,10 @@
   margin-top: 60px;
 }
 
+label {
+  display: block;
+}
+
 .square {
   display: inline-block;
   height: 100px;
