@@ -29,10 +29,10 @@ const createColorContainer = colors => {
     return square
   })
 
-  const colorContainer = document.createElement('div')
+  const colorContainer = new DocumentFragment()
 
   for (const element of colorElements) {
-    colorContainer.insertAdjacentElement('beforeend', element)
+    colorContainer.append(element)
   }
 
   return colorContainer
@@ -45,8 +45,9 @@ const createColorSelect = colors => {
 
   for (const color of colors) {
     const option = document.createElement('option')
+    const optionText = document.createTextNode(color)
+    option.append(optionText)
     option.setAttribute('value', color)
-    option.textContent = color
 
     colorSelect.insertAdjacentElement('beforeend', option)
   }
@@ -56,7 +57,7 @@ const createColorSelect = colors => {
       [...e.target.selectedOptions].map(option => option.value)
     )
     colorSection.innerHTML = ''
-    colorSection.insertAdjacentElement('beforeend', newColorContainer)
+    colorSection.appendChild(newColorContainer)
   })
 
   return colorSelect
