@@ -1,9 +1,10 @@
+import { addCarToApi, getCarsFromApi } from './api'
+import { showErrorMessage, hideErrorMessage } from './utils'
+
 import './style.css'
 
 const form = document.querySelector('[data-js="cars-form"]')
 const carsTable = document.querySelector('[data-js="table"]')
-
-const URL = 'http://localhost:3333/cars'
 
 const elementTypes = {
   image: createImage,
@@ -54,21 +55,6 @@ function createCarRow (car) {
   return tr
 }
 
-function showErrorMessage (content) {
-  const message = document.createElement('p')
-  message.textContent = content
-  message.setAttribute('data-js', 'message')
-  message.style.color = 'red'
-  form.insertAdjacentElement('afterend', message)
-}
-
-function hideErrorMessage () {
-  const message = document.querySelector('[data-js="message"]')
-  if (message) {
-    message.remove()
-  }
-}
-
 function addMessageToTable (message) {
   const messageElement = document.createElement('p')
   messageElement.textContent = message
@@ -86,46 +72,14 @@ function addCarsToTable (cars) {
   carsTable.appendChild(carElements)
 }
 
-async function addCarToApi (car) {
-  try {
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify(car)
-    })
-    const data = await response.json()
-
-    return data
-  } catch (error) {
-    console.log('Erro ao adicionar carro:', error)
-    showErrorMessage(
-      'Erro ao adicionar carro. Por favor, tente novamente em instantes.'
-    )
-
-    return
-  }
-}
-
-async function getCarsFromApi () {
-  try {
-    const response = await fetch(URL)
-    const data = await response.json()
-
-    return data
-  } catch (error) {
-    console.log('Erro ao carregar carros:', error)
-    showErrorMessage('Erro ao carregar carros do servidor.')
-
-    return
-  }
-}
-
 async function render () {
   const cars = await getCarsFromApi()
 
   if (!cars) {
+    showErrorMessage(
+      'Erro ao carregar carros do servidor.  Por favor, tente novamente em breve.',
+      form
+    )
     return
   }
 
@@ -156,8 +110,16 @@ form.addEventListener('submit', async e => {
 
   const response = await addCarToApi(newCar)
 
+  if (!response) {
+    showErrorMessage(
+      'Ocorreu um erro ao adicionar o carro. Por favor, tente novamente em breve.',
+      form
+    )
+    return
+  }
+
   if (response.error) {
-    showErrorMessage(response.message)
+    showErrorMessage(response.message, form)
     return
   }
 
