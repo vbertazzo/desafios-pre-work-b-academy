@@ -45,7 +45,8 @@ function createRemoveButton (value) {
   const td = document.createElement('button')
   td.type = 'button'
   td.textContent = 'Remover'
-  td.addEventListener('click', () => removeCarRow(value))
+  td.dataset.js = value
+  td.addEventListener('click', removeCarRow)
 
   return td
 }
@@ -70,8 +71,9 @@ function createCarRow (car) {
   return tr
 }
 
-async function removeCarRow (plate) {
-  const response = await removeCarFromApi(plate)
+async function removeCarRow (e) {
+  const button = e.target
+  const response = await removeCarFromApi(button.dataset.js)
 
   if (!response) {
     showErrorMessage(
@@ -82,7 +84,8 @@ async function removeCarRow (plate) {
     return
   }
 
-  const rowToRemove = document.querySelector(`[data-js="${plate}"]`)
+  const rowToRemove = document.querySelector(`[data-js="${button.dataset.js}"]`)
+  button.removeEventListener('click', removeCarRow)
   rowToRemove.remove()
 
   if (carsTable.childNodes.length === 0) {
@@ -91,10 +94,15 @@ async function removeCarRow (plate) {
 }
 
 function addEmptyMessageToTable (message) {
-  const messageElement = document.createElement('p')
-  messageElement.textContent = message
-  messageElement.setAttribute('data-js', 'message')
-  carsTable.appendChild(messageElement)
+  const tr = document.createElement('tr')
+  const td = document.createElement('td')
+  const thsLength = document.querySelectorAll('table th').length
+  td.setAttribute('colspan', thsLength)
+  td.textContent = message
+
+  tr.setAttribute('data-js', 'message')
+  tr.appendChild(td)
+  carsTable.appendChild(tr)
 }
 
 function addCarsToTable (cars) {
@@ -140,8 +148,7 @@ form.addEventListener('submit', async e => {
     return
   }
 
-  const newCarRow = createCarRow(newCar)
-  carsTable.appendChild(newCarRow)
+  addCarsToTable([newCar])
   e.target.reset()
   getElement('image').focus()
 })
@@ -167,4 +174,4 @@ async function initialRender () {
   addCarsToTable(cars)
 }
 
-await initialRender()
+initialRender()
