@@ -31,3 +31,22 @@ export async function getCarsFromApi () {
     return
   }
 }
+
+export async function removeCarFromApi (plate) {
+  try {
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ plate })
+    })
+    const data = await response.json()
+
+    return data
+  } catch (error) {
+    console.log('Erro ao remover carro:', error)
+
+    return
+  }
+}
