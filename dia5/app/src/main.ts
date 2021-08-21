@@ -16,13 +16,9 @@ const elementTypes = {
   color: createColor
 }
 
-type ElementType = keyof typeof elementTypes
-type ElementValue = {
-  src: string
-  alt: string
-} & string
+type ImageProps = { src: string; alt: string }
 
-function createImage(data: { src: string; alt: string }) {
+function createImage(data: ImageProps) {
   const td = document.createElement('td')
   const img = document.createElement('img')
   img.src = data.src
@@ -101,9 +97,9 @@ function createTableRow(data: CarProps) {
   tr.dataset.plate = data.plate
 
   elements.forEach(element => {
-    const elementType = element.type as ElementType
-    const elementValue = element.value as ElementValue
-    const td = elementTypes[elementType](elementValue)
+    const td = (elementTypes as {
+      [key: string]: (value: string | ImageProps) => HTMLTableDataCellElement
+    })[element.type](element.value)
     tr.appendChild(td)
   })
 
